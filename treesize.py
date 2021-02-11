@@ -20,7 +20,7 @@ def get_tree_size(path):
             continue
         if is_dir:
             total += get_tree_size(entry.path)
-            print(entry, get_tree_size(entry.path))
+            #print(entry, get_tree_size(entry.path))
         else:
             try:
                 total += entry.stat(follow_symlinks=False).st_size
@@ -31,14 +31,14 @@ bag = open('/Volumes/lpasync/9_not_MIable/Staged_BornDigital_Excel/2013_224_silv
 def payload(path):
     for line in bag:
         if re.match('Payload-Oxum', line):
-            print(line)
+            return line
 parent = os.path.dirname(path) 
 dirname=os.path.split(parent)[1]
 with open('acc.csv', 'w', newline='') as csvfile:
-    fieldnames = ['collection', 'bytes', 'tree' ]
+    fieldnames = ['collection', 'bytes', 'tree']
     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
     writer.writeheader()
-    writer.writerow({'collection': print(dirname), 'bytes': payload(path), 'tree': get_tree_size(path)})
+    writer.writerow({'collection': dirname, 'bytes': payload(path), 'tree': get_tree_size(path)})
 
 
 
