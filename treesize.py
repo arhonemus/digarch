@@ -20,7 +20,7 @@ def get_tree_size(path):
             continue
         if is_dir:
             total += get_tree_size(entry.path)
-            print(entry, get_tree_size(entry.path), entry.path)
+            print(entry, get_tree_size(entry.path))
         else:
             try:
                 total += entry.stat(follow_symlinks=False).st_size
