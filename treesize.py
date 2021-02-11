@@ -1,5 +1,5 @@
-import os
-
+import os, re, csv
+path = '/Volumes/lpasync/9_not_MIable/Staged_BornDigital_Excel/2013_224_silversodfy1311/data'
 def subdirs(path):
     """Yield directory names not starting with '.' under given path."""
     for entry in os.scandir(path):
@@ -20,11 +20,26 @@ def get_tree_size(path):
             continue
         if is_dir:
             total += get_tree_size(entry.path)
-            print(entry.path, get_tree_size(entry.path))
+            print(entry, get_tree_size(entry.path), entry.path)
         else:
             try:
                 total += entry.stat(follow_symlinks=False).st_size
             except OSError as error:
                 print('Error calling stat():', error, file=sys.stderr)
     return total
-get_tree_size(path='/Volumes/lpasync/9_not_MIable/Staged_BornDigital_Excel/2013_224_silversodfy1311')
+bag = open('/Volumes/lpasync/9_not_MIable/Staged_BornDigital_Excel/2013_224_silversodfy1311/bag-info.txt', 'r')
+def payload(path):
+    for line in bag:
+        if re.match('Payload-Oxum', line):
+            print(line)
+parent = os.path.dirname(path) 
+dirname=os.path.split(parent)[1]
+with open('acc.csv', 'w', newline='') as csvfile:
+    fieldnames = ['collection', 'bytes', 'tree' ]
+    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+    writer.writeheader()
+    writer.writerow({'collection': print(dirname), 'bytes': payload(path), 'tree': get_tree_size(path)})
+
+
+
+
